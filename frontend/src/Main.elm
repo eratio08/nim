@@ -213,6 +213,7 @@ type Msg
     | GotMove Id (Result Http.Error Move)
     | DeleteGame Id
     | GameDeleted (Result Http.Error ())
+    | ClearProblems
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -256,6 +257,9 @@ update msg model =
 
         DeleteGame id ->
             ( model, deleteGame model.backendUrl id )
+
+        ClearProblems ->
+            ( { model | problems = [] }, Cmd.none )
 
 
 httpErrorToString : Http.Error -> String
@@ -362,7 +366,7 @@ view model =
                 , renderView model.view
                 ]
             , div
-                [ class "container" ]
+                [ class "container is-size-1-mobile" ]
                 (viewProblems model.problems)
             ]
         ]
@@ -371,7 +375,15 @@ view model =
 
 viewProblems : List String -> List (Html Msg)
 viewProblems problems =
-    List.map text problems
+    List.map viewProblem problems
+
+
+viewProblem : String -> Html Msg
+viewProblem problem =
+    div [ class "notification is-danger is-light" ]
+        [ button [ class "delete", onClick ClearProblems ] []
+        , strong [] [ text problem ]
+        ]
 
 
 viewBreadcrumb : Html Msg

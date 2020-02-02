@@ -33,3 +33,8 @@ Or you can use Docker to build the native executable using: `./gradlew buildNati
 You can then execute your binary: `./build/nim-1.0.0-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/gradle-tooling#building-a-native-executable .
+
+## Elm Frontend
+
+To run the frontend in Dev mode or rebuild it, first run
+`npm ci` and afterwards `npm run dev` or `npm run build`.
