@@ -1,6 +1,7 @@
 package de.elurz.nim.model
 
 import com.fasterxml.jackson.annotation.JsonGetter
+import de.elurz.nim.controller.NimGameException
 import de.elurz.nim.strategy.GameStrategy
 import de.elurz.nim.strategy.RandomPick
 import java.util.*
@@ -50,8 +51,8 @@ data class NimGame(
         val currentPins = getCurrentPins()
         val pinDiff = currentPins - gameMove.pinsTaken
         return when {
-            lastActor == gameMove.actor -> RuntimeException("One actor must not make two moves successively.")
-            pinDiff < 0                 -> RuntimeException("This move takes more pins (${gameMove.pinsTaken}) the actual available ($currentPins).")
+            lastActor == gameMove.actor -> NimGameException("One actor must not make two moves successively.","invalid_actor")
+            pinDiff < 0                 -> NimGameException("This move takes more pins (${gameMove.pinsTaken}) the actual available ($currentPins).", "too_less_pins_left")
             else                        -> null
         };
     }
