@@ -57,4 +57,6 @@ internal class GameMoveControllerTest {
                 .body("actor", `is`(Actor.PLAYER.toString()))
         assertThat(gameStoreService[game.id]?.getCurrentPins(), `is`(lessThan(13 - 3 - 3)))
     }
+
+
 }

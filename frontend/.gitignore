@@ -1,0 +1,16 @@
+# elm-package generated files
+elm-stuff
+# elm-repl generated files
+repl-temp-*
+# env file
+.env
+# keycloak docker persistencies
+keycloak
+# vscode
+.vscode
+# parcel build
+dist
+# nodejs dependencies
+node_modules
+# parcel cache
+.cache

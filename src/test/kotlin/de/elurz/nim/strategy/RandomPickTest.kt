@@ -1,11 +1,10 @@
 package de.elurz.nim.strategy
 
-import de.elurz.nim.strategy.RandomPick
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.anyOf
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.anyOf
 
 internal class RandomPickTest {
     private val testSubject = RandomPick

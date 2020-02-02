@@ -1,6 +1,5 @@
 package de.elurz.nim.controller
 
-import de.elurz.nim.model.Actor
 import de.elurz.nim.model.GameMove
 import de.elurz.nim.service.GameEngine
 import de.elurz.nim.service.NimGameStoreService
@@ -19,7 +18,6 @@ class GameMoveController @Inject constructor(val gameStoreService: NimGameStoreS
     fun postGameMove(@QueryParam("gid") gameId: String, gameMove: GameMove): Response {
         val game = gameStoreService[gameId] ?: throw RuntimeException("Game not found");
         val newGame = gameEngine.play(game, gameMove);
-        println(newGame.getCurrentPins())
         gameStoreService.put(newGame.id, newGame)
         return Response.status(201).entity(newGame.moveHistory.last()).build()
     }

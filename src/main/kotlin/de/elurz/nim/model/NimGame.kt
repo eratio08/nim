@@ -12,13 +12,12 @@ data class NimGame(
         val moveHistory: List<GameMove> = mutableListOf(),
         val gameStrategy: GameStrategy = RandomPick,
         val id: String = UUID.randomUUID().toString()) {
-    private val initialPins = 13
 
     /**
      * @return the current pin count
      */
-    fun getCurrentPins() : Int =
-            moveHistory.asSequence().fold(initialPins, { acc, move -> acc - move.pinsTaken })
+    fun getCurrentPins(): Int =
+            moveHistory.asSequence().fold(INITIAL_PINS, { acc, move -> acc - move.pinsTaken })
 
     /**
      * @return true, if the no pins can be taken. else false
@@ -43,7 +42,7 @@ data class NimGame(
         }
         isMoveValid(gameMove)?.let { throw it }
         val newGameHistory = listOf(*moveHistory.toTypedArray(), gameMove)
-        return this.copy(moveHistory=newGameHistory)
+        return this.copy(moveHistory = newGameHistory)
     }
 
     private fun isMoveValid(gameMove: GameMove): Exception? {
@@ -52,12 +51,16 @@ data class NimGame(
         val pinDiff = currentPins - gameMove.pinsTaken
         return when {
             lastActor == gameMove.actor -> RuntimeException("One actor must not make two moves successively.")
-            pinDiff < 1                 -> RuntimeException("This move take more pins the actual available. Only $currentPins are available.")
+            pinDiff < 0                 -> RuntimeException("This move takes more pins (${gameMove.pinsTaken}) the actual available ($currentPins).")
             else                        -> null
         };
     }
 
     @JsonGetter("gameStrategy")
     fun getGameStrategyName() = gameStrategy.toString()
+
+    companion object {
+        private const val INITIAL_PINS = 13
+    }
 }
 

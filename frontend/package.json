@@ -1,0 +1,22 @@
+{
+  "name": "nim-frontend",
+  "version": "1.0.0",
+  "description": "Elm frontend for the Nim game",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel static/index.html",
+    "build": "parcel build static/index.html"
+  },
+  "author": "Eike Lurz <eike.lurz@tuta.io>",
+  "license": "ISC",
+  "devDependencies": {
+    "elm-hot": "^1.1.4",
+    "node-elm-compiler": "^5.0.4",
+    "parcel-bundler": "^1.12.4",
+    "prettier": "^1.19.1",
+    "sass": "^1.25.0"
+  },
+  "dependencies": {
+    "bulma": "^0.8.0"
+  }
+}

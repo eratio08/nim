@@ -1,6 +1,5 @@
 package de.elurz.nim.model
 
-import de.elurz.nim.model.Actor
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.junit.jupiter.api.Test

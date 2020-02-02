@@ -1,7 +1,5 @@
 package de.elurz.nim.strategy
 
-import com.fasterxml.jackson.annotation.JsonGetter
-
 /**
  * A game strategy which tries to be smart calculating the number of pins to take.
  * Will try to force the opponent into a loosing state.
@@ -9,11 +7,18 @@ import com.fasterxml.jackson.annotation.JsonGetter
  * @see GameStrategy
  */
 object SmartPick : GameStrategy {
+
     override fun computePins(remainingPins: Int): Int {
-        return 1
+        val take = remainingPins % 4
+        return when {
+            remainingPins == 0 -> 0
+            take == 0          -> 3
+            take == 3          -> 2
+            take == 2          -> 1
+            else               -> take
+        }
     }
 
-    @JsonGetter("name")
     override fun toString(): String {
         return "SmartPick"
     }

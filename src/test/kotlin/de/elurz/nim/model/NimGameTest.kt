@@ -1,6 +1,5 @@
 package de.elurz.nim.model
 
-import org.hamcrest.MatcherAssert
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.*
@@ -74,6 +73,6 @@ internal class NimGameTest {
                                      GameMove(3, Actor.PLAYER)))
         val move = GameMove(3, Actor.COMPUTER)
         val exception = assertThrows<RuntimeException> { testSubject.makeMove(move) }
-        assertThat(exception.message, Matchers.startsWith("This move take more pins the actual available."))
+        assertThat(exception.message, Matchers.startsWith("This move take more pins"))
     }
 }

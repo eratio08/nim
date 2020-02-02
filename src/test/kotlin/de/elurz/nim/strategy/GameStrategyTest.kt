@@ -1,8 +1,5 @@
 package de.elurz.nim.strategy
 
-import de.elurz.nim.strategy.GameStrategy
-import de.elurz.nim.strategy.RandomPick
-import de.elurz.nim.strategy.SmartPick
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.junit.jupiter.api.Test
