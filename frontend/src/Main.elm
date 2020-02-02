@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (..)
-import Html.Attributes exposing (alt, class, title)
+import Html.Attributes exposing (alt, class, disabled, title)
 import Html.Events exposing (onClick)
 import Http
 import Json.Decode exposing (Decoder, andThen, bool, fail, int, list, nullable, string, succeed)
@@ -42,16 +42,6 @@ initialModel backendUrl =
 type View
     = Games (List Game)
     | SingleGame Game
-
-
-viewToStr : View -> String
-viewToStr v =
-    case v of
-        Games _ ->
-            "Games"
-
-        SingleGame game ->
-            "Game " ++ game.id
 
 
 type Actor
@@ -238,13 +228,13 @@ update msg model =
             ( model, starteGame model.backendUrl Smart )
 
         GotGames (Ok games) ->
-            ( { model | view = Games games }, Cmd.none )
+            ( { model | view = Games games, problems = [] }, Cmd.none )
 
         GotGames (Err error) ->
             ( { model | problems = [ httpErrorToString error ] }, Cmd.none )
 
         GotGame (Ok game) ->
-            ( { model | view = SingleGame game }, Cmd.none )
+            ( { model | view = SingleGame game, problems = [] }, Cmd.none )
 
         GotGame (Err error) ->
             ( { model | problems = [ httpErrorToString error ] }, Cmd.none )
@@ -253,13 +243,13 @@ update msg model =
             ( model, makeMove model.backendUrl id move )
 
         GotMove id (Ok _) ->
-            ( model, getGame model.backendUrl id )
+            ( { model | problems = [] }, getGame model.backendUrl id )
 
         GotMove _ (Err error) ->
             ( { model | problems = [ httpErrorToString error ] }, Cmd.none )
 
         GameDeleted (Ok _) ->
-            ( model, getGames model.backendUrl )
+            ( { model | problems = [] }, getGames model.backendUrl )
 
         GameDeleted (Err error) ->
             ( { model | problems = [ httpErrorToString error ] }, Cmd.none )
@@ -510,6 +500,10 @@ viewGameRow game =
 
 viewGame : Game -> Html Msg
 viewGame game =
+    let
+        isDisabled should is =
+            disabled (should > is)
+    in
     div []
         [ div
             [ class "content" ]
@@ -550,17 +544,17 @@ viewGame game =
             [ div
                 [ class "column  is-2" ]
                 [ button
-                    [ class "button is-link", onClick (MakeMove (Move 1 Player) game.id) ]
+                    [ class "button is-link", onClick (MakeMove (Move 1 Player) game.id), isDisabled 1 game.currentPins ]
                     [ text "Take 1" ]
                 ]
             , div [ class "column  is-2" ]
                 [ button
-                    [ class "button is-link", onClick (MakeMove (Move 2 Player) game.id) ]
+                    [ class "button is-link", onClick (MakeMove (Move 2 Player) game.id), isDisabled 2 game.currentPins ]
                     [ text "Take 2" ]
                 ]
             , div [ class "column is-2" ]
                 [ button
-                    [ class "button is-link", onClick (MakeMove (Move 3 Player) game.id) ]
+                    [ class "button is-link", onClick (MakeMove (Move 3 Player) game.id), isDisabled 3 game.currentPins ]
                     [ text "Take 3" ]
                 ]
             ]

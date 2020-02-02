@@ -32,4 +32,12 @@ class GameController @Inject constructor(val gameStoreService: NimGameStoreServi
     @Produces(MediaType.APPLICATION_JSON)
     fun getGames() = gameStoreService.values()
 
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun deleteGame(@PathParam("id") id: String): Response {
+        return gameStoreService.remove(id)?.let { Response.status(204).build() }
+                ?: Response.status(404).entity(Error(404, "game_not_found", "Did not find game")).build()
+    }
+
 }

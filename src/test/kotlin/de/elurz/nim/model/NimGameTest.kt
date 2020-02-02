@@ -73,6 +73,6 @@ internal class NimGameTest {
                                      GameMove(3, Actor.PLAYER)))
         val move = GameMove(3, Actor.COMPUTER)
         val exception = assertThrows<RuntimeException> { testSubject.makeMove(move) }
-        assertThat(exception.message, Matchers.startsWith("This move take more pins"))
+        assertThat(exception.message, Matchers.startsWith("This move takes more pins"))
     }
 }

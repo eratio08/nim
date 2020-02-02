@@ -14,14 +14,18 @@ class GameEngine {
     fun play(game: NimGame, gameMove: GameMove): NimGame {
         return when (game.getCurrentActor()) {
             Actor.PLAYER -> game.makeMove(buildComputerMove(game)).makeMove(gameMove)
-            else         -> game.makeMove(gameMove).makeMove(buildComputerMove(game))
+            else         -> {
+                val newGame = game.makeMove(gameMove)
+                val computerMove = buildComputerMove(newGame)
+                newGame.makeMove(computerMove)
+            }
         }
     }
 
     private fun buildComputerMove(game: NimGame): GameMove {
         val currentPins = game.getCurrentPins()
         val pinsToTake = game.gameStrategy.computePins(currentPins)
-        if(game.isGameFinished()) {
+        if (game.isGameFinished()) {
             return game.moveHistory.last()
         }
         return GameMove(pinsToTake, Actor.COMPUTER)

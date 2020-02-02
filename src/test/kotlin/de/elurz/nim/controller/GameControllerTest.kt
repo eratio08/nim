@@ -53,7 +53,7 @@ class GameControllerTest {
     }
 
     @Test
-    @DisplayName("Should retrieve a game state by game id.")
+    @DisplayName("Should retrieve a game by game id.")
     fun should_get_a_game_by_id() {
         var game = NimGame(gameStrategy = RandomPick)
         gameStoreService.put(game.id, game)
@@ -71,8 +71,8 @@ class GameControllerTest {
     @Test
     @DisplayName("Should retrieve all games.")
     fun should_get_all_games() {
-        val game1 = NimGame(gameStrategy =  RandomPick)
-        val game2 = NimGame(gameStrategy =  SmartPick)
+        val game1 = NimGame(gameStrategy = RandomPick)
+        val game2 = NimGame(gameStrategy = SmartPick)
         gameStoreService.put(game1.id, game1)
         gameStoreService.put(game2.id, game2)
         given()
@@ -85,4 +85,16 @@ class GameControllerTest {
 
     }
 
+    @Test
+    @DisplayName("Should remove a game by game id.")
+    fun should_remove_a_game_by_id() {
+        var game = NimGame(gameStrategy = RandomPick)
+        gameStoreService.put(game.id, game)
+        var resp = given().pathParam("id", game.id)
+                .`when`()
+                .delete("/nim-games/{id}")
+                .then()
+                .statusCode(204)
+
+    }
 }

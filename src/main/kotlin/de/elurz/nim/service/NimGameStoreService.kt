@@ -7,23 +7,19 @@ import javax.inject.Singleton
 class NimGameStoreService() {
     private val store: MutableMap<String, NimGame> = HashMap<String, NimGame>()
 
-    fun put(key: String, value: NimGame): NimGame? {
-        return store.put(key, value);
-    }
+    fun put(key: String, value: NimGame): NimGame? =
+            store.put(key, value);
 
-    fun remove(key: String): NimGame? {
-        return this.store.remove(key)
-    }
+    fun remove(key: String): NimGame? =
+            this.store.remove(key)
 
-    operator fun get(key: String): NimGame? {
-        return this.store[key]
-    }
+    operator fun get(key: String): NimGame? =
+            this.store[key]
 
-    fun values(): Collection<NimGame> {
-        return this.store.values;
-    }
+    fun values(): Collection<NimGame> =
+            this.store.values;
 
-    fun clear() {
-        this.store.clear()
-    }
+    fun clear() =
+            this.store.clear()
+
 }
