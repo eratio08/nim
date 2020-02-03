@@ -2,8 +2,8 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (..)
-import Html.Attributes exposing (alt, class, disabled, title)
-import Html.Events exposing (onClick)
+import Html.Attributes exposing (alt, class, disabled, selected, title)
+import Html.Events exposing (on, onClick)
 import Http
 import Json.Decode exposing (Decoder, andThen, bool, fail, int, list, nullable, string, succeed)
 import Json.Decode.Pipeline exposing (required)
@@ -34,13 +34,13 @@ type alias Model =
 initialModel : String -> Model
 initialModel backendUrl =
     { backendUrl = backendUrl
-    , view = Games []
+    , view = Games [] Random
     , problems = []
     }
 
 
 type View
-    = Games (List Game)
+    = Games (List Game) GameStrategy
     | SingleGame Game
 
 
@@ -214,22 +214,30 @@ type Msg
     | DeleteGame Id
     | GameDeleted (Result Http.Error ())
     | ClearProblems
+    | GameStrategySelected GameStrategy
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        SwitchViewTo (Games games) ->
-            ( { model | view = Games games }, getGames model.backendUrl )
+        SwitchViewTo (Games games gameStrategy) ->
+            ( { model | view = Games games gameStrategy }, getGames model.backendUrl )
 
         SwitchViewTo v ->
             ( { model | view = v }, Cmd.none )
 
         StartNewGame ->
-            ( model, starteGame model.backendUrl Smart )
+            case model.view of
+                Games _ strategy ->
+                    ( model
+                    , starteGame model.backendUrl strategy
+                    )
+
+                _ ->
+                    ( model, Cmd.none )
 
         GotGames (Ok games) ->
-            ( { model | view = Games games, problems = [] }, Cmd.none )
+            ( { model | view = Games games Random, problems = [] }, Cmd.none )
 
         GotGames (Err error) ->
             ( { model | problems = [ httpErrorToString error ] }, Cmd.none )
@@ -260,6 +268,14 @@ update msg model =
 
         ClearProblems ->
             ( { model | problems = [] }, Cmd.none )
+
+        GameStrategySelected strategy ->
+            case model.view of
+                Games games _ ->
+                    ( { model | view = Games games strategy }, Cmd.none )
+
+                _ ->
+                    ( model, Cmd.none )
 
 
 httpErrorToString : Http.Error -> String
@@ -391,7 +407,7 @@ viewBreadcrumb =
     nav [ class "breadcrumb is-right" ]
         [ ul []
             [ li []
-                [ a [ onClick (SwitchViewTo (Games [])), class "is-active" ]
+                [ a [ onClick (SwitchViewTo (Games [] Random)), class "is-active" ]
                     [ text "Games" ]
                 ]
             ]
@@ -409,15 +425,15 @@ viewBox title content =
 renderView : View -> Html Msg
 renderView v =
     case v of
-        Games games ->
-            viewBox "Games" (viewGames games)
+        Games games gameStrategy ->
+            viewBox "Games" (viewGames games gameStrategy)
 
         SingleGame game ->
             viewBox ("Game " ++ game.id) (viewGame game)
 
 
-viewGames : List Game -> Html Msg
-viewGames games =
+viewGames : List Game -> GameStrategy -> Html Msg
+viewGames games gameStrategy =
     div [ class "container" ]
         [ table
             [ class "table is-hoverable" ]
@@ -450,22 +466,31 @@ viewGames games =
                 ]
             , tbody [] (List.map viewGameRow games)
             ]
-        , tfoot [] [ viewAddGameRow ]
+        , tfoot [] [ viewAddGameRow gameStrategy ]
         ]
 
 
-viewAddGameRow : Html Msg
-viewAddGameRow =
+viewAddGameRow : GameStrategy -> Html Msg
+viewAddGameRow strategy =
     tr []
         [ td []
-            []
-        , td [] []
-        , td [] []
-        , td [] []
-        , td []
+            [ div [ class "columns" ]
+                [ div [ class "column" ] [ viewGameStrategySelection strategy ]
+                , div [ class "column" ] []
+                , div [ class "column" ] [ viewStartGameButton ]
+                ]
+            ]
+        ]
+
+
+viewStartGameButton : Html Msg
+viewStartGameButton =
+    div [ class "field" ]
+        [ label [ class "label" ] [ text "New Game" ]
+        , div [ class "control" ]
             [ button
                 [ class "button is-info", onClick StartNewGame ]
-                [ text "Start New Game" ]
+                [ text "Start" ]
             ]
         ]
 
@@ -535,7 +560,7 @@ viewGame game =
                         ]
                     ]
                 , tr []
-                    [ td [] [ strong [] [ text "Gmae Strategy" ] ]
+                    [ td [] [ strong [] [ text "Game Strategy" ] ]
                     , td []
                         [ text <| gameStrategyToString game.gameStrategy
                         ]
@@ -598,5 +623,32 @@ viewMoves moves =
     div [ class "table-container" ]
         [ table []
             [ tr [] renderMoves
+            ]
+        ]
+
+
+viewGameStrategySelection : GameStrategy -> Html Msg
+viewGameStrategySelection strategy =
+    let
+        isSelected strat =
+            selected (strat == strategy)
+    in
+    div [ class "field" ]
+        [ label [ class "label" ] [ text "Computer Strategy" ]
+        , div [ class "control" ]
+            [ div [ class "select" ]
+                [ select []
+                    [ option
+                        [ onClick <| GameStrategySelected Random
+                        , isSelected Random
+                        ]
+                        [ text "Random" ]
+                    , option
+                        [ onClick <| GameStrategySelected Smart
+                        , isSelected Smart
+                        ]
+                        [ text "Smart" ]
+                    ]
+                ]
             ]
         ]
