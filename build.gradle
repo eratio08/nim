@@ -51,3 +51,20 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8
 }
+
+task includeFrontend(type: Copy) {
+    description "Copies sources to the dest directory"
+    dependsOn "buildFrontend"
+    from "frontend/dist"
+    into "src/main/resources/META-INF/resources"
+}
+
+task buildFrontend(type: Exec) {
+    description "Build Frontend"
+    workingDir "frontend"
+    commandLine "npm", "ci"
+    commandLine "npm", "run", "build"
+}
+
+compileKotlin.finalizedBy includeFrontend
+
