@@ -11218,14 +11218,15 @@ var $author$project$Main$getGames = function (baseUrl) {
 			url: baseUrl + '/nim-games'
 		});
 };
-var $author$project$Main$Games = function (a) {
-	return {$: 'Games', a: a};
-};
+var $author$project$Main$Games = F2(
+	function (a, b) {
+		return {$: 'Games', a: a, b: b};
+	});
 var $author$project$Main$initialModel = function (backendUrl) {
 	return {
 		backendUrl: backendUrl,
 		problems: _List_Nil,
-		view: $author$project$Main$Games(_List_Nil)
+		view: A2($author$project$Main$Games, _List_Nil, $author$project$Main$Random)
 	};
 };
 var $author$project$Main$init = function (backendBaseUrl) {
@@ -11371,12 +11372,14 @@ var $author$project$Main$update = F2(
 		switch (msg.$) {
 			case 'SwitchViewTo':
 				if (msg.a.$ === 'Games') {
-					var games = msg.a.a;
+					var _v1 = msg.a;
+					var games = _v1.a;
+					var gameStrategy = _v1.b;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								view: $author$project$Main$Games(games)
+								view: A2($author$project$Main$Games, games, gameStrategy)
 							}),
 						$author$project$Main$getGames(model.backendUrl));
 				} else {
@@ -11388,9 +11391,15 @@ var $author$project$Main$update = F2(
 						$elm$core$Platform$Cmd$none);
 				}
 			case 'StartNewGame':
-				return _Utils_Tuple2(
-					model,
-					A2($author$project$Main$starteGame, model.backendUrl, $author$project$Main$Smart));
+				var _v2 = model.view;
+				if (_v2.$ === 'Games') {
+					var strategy = _v2.b;
+					return _Utils_Tuple2(
+						model,
+						A2($author$project$Main$starteGame, model.backendUrl, strategy));
+				} else {
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				}
 			case 'GotGames':
 				if (msg.a.$ === 'Ok') {
 					var games = msg.a.a;
@@ -11399,7 +11408,7 @@ var $author$project$Main$update = F2(
 							model,
 							{
 								problems: _List_Nil,
-								view: $author$project$Main$Games(games)
+								view: A2($author$project$Main$Games, games, $author$project$Main$Random)
 							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
@@ -11491,12 +11500,27 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					model,
 					A2($author$project$Main$deleteGame, model.backendUrl, id));
-			default:
+			case 'ClearProblems':
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{problems: _List_Nil}),
 					$elm$core$Platform$Cmd$none);
+			default:
+				var strategy = msg.a;
+				var _v3 = model.view;
+				if (_v3.$ === 'Games') {
+					var games = _v3.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								view: A2($author$project$Main$Games, games, strategy)
+							}),
+						$elm$core$Platform$Cmd$none);
+				} else {
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				}
 		}
 	});
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
@@ -11718,7 +11742,7 @@ var $author$project$Main$viewGame = function (game) {
 												_List_Nil,
 												_List_fromArray(
 													[
-														$elm$html$Html$text('Gmae Strategy')
+														$elm$html$Html$text('Game Strategy')
 													]))
 											])),
 										A2(
@@ -11876,19 +11900,111 @@ var $elm$html$Html$tbody = _VirtualDom_node('tbody');
 var $elm$html$Html$tfoot = _VirtualDom_node('tfoot');
 var $elm$html$Html$th = _VirtualDom_node('th');
 var $elm$html$Html$thead = _VirtualDom_node('thead');
+var $author$project$Main$GameStrategySelected = function (a) {
+	return {$: 'GameStrategySelected', a: a};
+};
+var $elm$html$Html$label = _VirtualDom_node('label');
+var $elm$html$Html$option = _VirtualDom_node('option');
+var $elm$html$Html$select = _VirtualDom_node('select');
+var $elm$html$Html$Attributes$selected = $elm$html$Html$Attributes$boolProperty('selected');
+var $author$project$Main$viewGameStrategySelection = function (strategy) {
+	var isSelected = function (strat) {
+		return $elm$html$Html$Attributes$selected(
+			_Utils_eq(strat, strategy));
+	};
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('field')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$label,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('label')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Computer Strategy')
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('control')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('select')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$select,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$option,
+										_List_fromArray(
+											[
+												$elm$html$Html$Events$onClick(
+												$author$project$Main$GameStrategySelected($author$project$Main$Random)),
+												isSelected($author$project$Main$Random)
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text('Random')
+											])),
+										A2(
+										$elm$html$Html$option,
+										_List_fromArray(
+											[
+												$elm$html$Html$Events$onClick(
+												$author$project$Main$GameStrategySelected($author$project$Main$Smart)),
+												isSelected($author$project$Main$Smart)
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text('Smart')
+											]))
+									]))
+							]))
+					]))
+			]));
+};
 var $author$project$Main$StartNewGame = {$: 'StartNewGame'};
-var $author$project$Main$viewAddGameRow = A2(
-	$elm$html$Html$tr,
-	_List_Nil,
+var $author$project$Main$viewStartGameButton = A2(
+	$elm$html$Html$div,
 	_List_fromArray(
 		[
-			A2($elm$html$Html$td, _List_Nil, _List_Nil),
-			A2($elm$html$Html$td, _List_Nil, _List_Nil),
-			A2($elm$html$Html$td, _List_Nil, _List_Nil),
-			A2($elm$html$Html$td, _List_Nil, _List_Nil),
+			$elm$html$Html$Attributes$class('field')
+		]),
+	_List_fromArray(
+		[
 			A2(
-			$elm$html$Html$td,
-			_List_Nil,
+			$elm$html$Html$label,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('label')
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text('New Game')
+				])),
+			A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('control')
+				]),
 			_List_fromArray(
 				[
 					A2(
@@ -11900,10 +12016,58 @@ var $author$project$Main$viewAddGameRow = A2(
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text('Start New Game')
+							$elm$html$Html$text('Start')
 						]))
 				]))
 		]));
+var $author$project$Main$viewAddGameRow = function (strategy) {
+	return A2(
+		$elm$html$Html$tr,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$td,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('columns')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('column')
+									]),
+								_List_fromArray(
+									[
+										$author$project$Main$viewGameStrategySelection(strategy)
+									])),
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('column')
+									]),
+								_List_Nil),
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('column')
+									]),
+								_List_fromArray(
+									[$author$project$Main$viewStartGameButton]))
+							]))
+					]))
+			]));
+};
 var $author$project$Main$DeleteGame = function (a) {
 	return {$: 'DeleteGame', a: a};
 };
@@ -12018,134 +12182,138 @@ var $author$project$Main$viewGameRow = function (game) {
 					]))
 			]));
 };
-var $author$project$Main$viewGames = function (games) {
-	return A2(
-		$elm$html$Html$div,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$class('container')
-			]),
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$table,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('table is-hoverable')
-					]),
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$thead,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$tr,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$th,
-										_List_Nil,
-										_List_fromArray(
-											[
-												A2(
-												$elm$html$Html$abbr,
-												_List_fromArray(
-													[
-														$elm$html$Html$Attributes$title('Id')
-													]),
-												_List_fromArray(
-													[
-														$elm$html$Html$text('Id')
-													]))
-											])),
-										A2(
-										$elm$html$Html$th,
-										_List_Nil,
-										_List_fromArray(
-											[
-												A2(
-												$elm$html$Html$abbr,
-												_List_fromArray(
-													[
-														$elm$html$Html$Attributes$title('Finished')
-													]),
-												_List_fromArray(
-													[
-														$elm$html$Html$text('Has Finished')
-													]))
-											])),
-										A2(
-										$elm$html$Html$th,
-										_List_Nil,
-										_List_fromArray(
-											[
-												A2(
-												$elm$html$Html$abbr,
-												_List_fromArray(
-													[
-														$elm$html$Html$Attributes$title('Remaining Pins')
-													]),
-												_List_fromArray(
-													[
-														$elm$html$Html$text('Pins')
-													]))
-											])),
-										A2(
-										$elm$html$Html$th,
-										_List_Nil,
-										_List_fromArray(
-											[
-												A2(
-												$elm$html$Html$abbr,
-												_List_fromArray(
-													[
-														$elm$html$Html$Attributes$title('Current Actor')
-													]),
-												_List_fromArray(
-													[
-														$elm$html$Html$text('Actor')
-													]))
-											])),
-										A2(
-										$elm$html$Html$th,
-										_List_Nil,
-										_List_fromArray(
-											[
-												A2(
-												$elm$html$Html$abbr,
-												_List_fromArray(
-													[
-														$elm$html$Html$Attributes$title('Actions')
-													]),
-												_List_fromArray(
-													[
-														$elm$html$Html$text('Actions')
-													]))
-											]))
-									]))
-							])),
-						A2(
-						$elm$html$Html$tbody,
-						_List_Nil,
-						A2($elm$core$List$map, $author$project$Main$viewGameRow, games))
-					])),
-				A2(
-				$elm$html$Html$tfoot,
-				_List_Nil,
-				_List_fromArray(
-					[$author$project$Main$viewAddGameRow]))
-			]));
-};
+var $author$project$Main$viewGames = F2(
+	function (games, gameStrategy) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('container')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$table,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('table is-hoverable')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$thead,
+							_List_Nil,
+							_List_fromArray(
+								[
+									A2(
+									$elm$html$Html$tr,
+									_List_Nil,
+									_List_fromArray(
+										[
+											A2(
+											$elm$html$Html$th,
+											_List_Nil,
+											_List_fromArray(
+												[
+													A2(
+													$elm$html$Html$abbr,
+													_List_fromArray(
+														[
+															$elm$html$Html$Attributes$title('Id')
+														]),
+													_List_fromArray(
+														[
+															$elm$html$Html$text('Id')
+														]))
+												])),
+											A2(
+											$elm$html$Html$th,
+											_List_Nil,
+											_List_fromArray(
+												[
+													A2(
+													$elm$html$Html$abbr,
+													_List_fromArray(
+														[
+															$elm$html$Html$Attributes$title('Finished')
+														]),
+													_List_fromArray(
+														[
+															$elm$html$Html$text('Has Finished')
+														]))
+												])),
+											A2(
+											$elm$html$Html$th,
+											_List_Nil,
+											_List_fromArray(
+												[
+													A2(
+													$elm$html$Html$abbr,
+													_List_fromArray(
+														[
+															$elm$html$Html$Attributes$title('Remaining Pins')
+														]),
+													_List_fromArray(
+														[
+															$elm$html$Html$text('Pins')
+														]))
+												])),
+											A2(
+											$elm$html$Html$th,
+											_List_Nil,
+											_List_fromArray(
+												[
+													A2(
+													$elm$html$Html$abbr,
+													_List_fromArray(
+														[
+															$elm$html$Html$Attributes$title('Current Actor')
+														]),
+													_List_fromArray(
+														[
+															$elm$html$Html$text('Actor')
+														]))
+												])),
+											A2(
+											$elm$html$Html$th,
+											_List_Nil,
+											_List_fromArray(
+												[
+													A2(
+													$elm$html$Html$abbr,
+													_List_fromArray(
+														[
+															$elm$html$Html$Attributes$title('Actions')
+														]),
+													_List_fromArray(
+														[
+															$elm$html$Html$text('Actions')
+														]))
+												]))
+										]))
+								])),
+							A2(
+							$elm$html$Html$tbody,
+							_List_Nil,
+							A2($elm$core$List$map, $author$project$Main$viewGameRow, games))
+						])),
+					A2(
+					$elm$html$Html$tfoot,
+					_List_Nil,
+					_List_fromArray(
+						[
+							$author$project$Main$viewAddGameRow(gameStrategy)
+						]))
+				]));
+	});
 var $author$project$Main$renderView = function (v) {
 	if (v.$ === 'Games') {
 		var games = v.a;
+		var gameStrategy = v.b;
 		return A2(
 			$author$project$Main$viewBox,
 			'Games',
-			$author$project$Main$viewGames(games));
+			A2($author$project$Main$viewGames, games, gameStrategy));
 	} else {
 		var game = v.a;
 		return A2(
@@ -12180,7 +12348,7 @@ var $author$project$Main$viewBreadcrumb = A2(
 								[
 									$elm$html$Html$Events$onClick(
 									$author$project$Main$SwitchViewTo(
-										$author$project$Main$Games(_List_Nil))),
+										A2($author$project$Main$Games, _List_Nil, $author$project$Main$Random))),
 									$elm$html$Html$Attributes$class('is-active')
 								]),
 							_List_fromArray(
@@ -12277,7 +12445,7 @@ var $author$project$Main$view = function (model) {
 };
 var $author$project$Main$main = $elm$browser$Browser$document(
 	{init: $author$project$Main$init, subscriptions: $author$project$Main$subscriptions, update: $author$project$Main$update, view: $author$project$Main$view});
-_Platform_export({'Main':{'init':$author$project$Main$main($elm$json$Json$Decode$string)({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{"Main.Game":{"args":[],"type":"{ moveHistory : List.List Main.Move, gameStrategy : Main.GameStrategy, id : Main.Id, currentPins : Basics.Int, currentActor : Maybe.Maybe Main.Actor, gameFinished : Basics.Bool }"},"Main.Id":{"args":[],"type":"String.String"},"Main.Move":{"args":[],"type":"{ pinsTaken : Basics.Int, actor : Main.Actor }"}},"unions":{"Main.Msg":{"args":[],"tags":{"SwitchViewTo":["Main.View"],"StartNewGame":[],"GotGames":["Result.Result Http.Error (List.List Main.Game)"],"GotGame":["Result.Result Http.Error Main.Game"],"MakeMove":["Main.Move","Main.Id"],"GotMove":["Main.Id","Result.Result Http.Error Main.Move"],"DeleteGame":["Main.Id"],"GameDeleted":["Result.Result Http.Error ()"],"ClearProblems":[]}},"Main.Actor":{"args":[],"tags":{"Computer":[],"Player":[]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Main.GameStrategy":{"args":[],"tags":{"Random":[],"Smart":[]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}},"Main.View":{"args":[],"tags":{"Games":["List.List Main.Game"],"SingleGame":["Main.Game"]}}}}})}});
+_Platform_export({'Main':{'init':$author$project$Main$main($elm$json$Json$Decode$string)({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{"Main.Game":{"args":[],"type":"{ moveHistory : List.List Main.Move, gameStrategy : Main.GameStrategy, id : Main.Id, currentPins : Basics.Int, currentActor : Maybe.Maybe Main.Actor, gameFinished : Basics.Bool }"},"Main.Id":{"args":[],"type":"String.String"},"Main.Move":{"args":[],"type":"{ pinsTaken : Basics.Int, actor : Main.Actor }"}},"unions":{"Main.Msg":{"args":[],"tags":{"SwitchViewTo":["Main.View"],"StartNewGame":[],"GotGames":["Result.Result Http.Error (List.List Main.Game)"],"GotGame":["Result.Result Http.Error Main.Game"],"MakeMove":["Main.Move","Main.Id"],"GotMove":["Main.Id","Result.Result Http.Error Main.Move"],"DeleteGame":["Main.Id"],"GameDeleted":["Result.Result Http.Error ()"],"ClearProblems":[],"GameStrategySelected":["Main.GameStrategy"]}},"Main.Actor":{"args":[],"tags":{"Computer":[],"Player":[]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String.String"],"Timeout":[],"NetworkError":[],"BadStatus":["Basics.Int"],"BadBody":["String.String"]}},"Main.GameStrategy":{"args":[],"tags":{"Random":[],"Smart":[]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"List.List":{"args":["a"],"tags":{}},"Maybe.Maybe":{"args":["a"],"tags":{"Just":["a"],"Nothing":[]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}},"String.String":{"args":[],"tags":{"String":[]}},"Main.View":{"args":[],"tags":{"Games":["List.List Main.Game","Main.GameStrategy"],"SingleGame":["Main.Game"]}}}}})}});
 
 //////////////////// HMR BEGIN ////////////////////
 
@@ -12847,7 +13015,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40971" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34369" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
