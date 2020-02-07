@@ -53,18 +53,16 @@ compileTestKotlin {
 }
 
 task includeFrontend(type: Copy) {
-    description "Copies sources to the dest directory"
+    description "Copies frontend dist to static dir"
     dependsOn "buildFrontend"
-    from "frontend/dist"
-    into "src/main/resources/META-INF/resources"
+    from "$projectDir/frontend/dist"
+    into "$projectDir/src/main/resources/META-INF/resources"
 }
 
 task buildFrontend(type: Exec) {
     description "Build Frontend"
-    workingDir "frontend"
+    workingDir "$projectDir/frontend"
     commandLine "npm", "ci"
     commandLine "npm", "run", "build"
 }
-
-compileKotlin.finalizedBy includeFrontend
 
