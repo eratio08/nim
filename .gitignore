@@ -32,4 +32,4 @@ nb-configuration.xml
 build/
 
 # static frontend
-src/main/resources/META-INF/resources/
+src/main/resources/META-INF/resources/*
