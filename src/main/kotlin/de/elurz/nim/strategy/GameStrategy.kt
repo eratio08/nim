@@ -24,7 +24,7 @@ interface GameStrategy {
          * @return GameStrategy
          */
         @JvmStatic
-        fun fromAbr(abr:String): GameStrategy? = when (abr) {
+        fun fromAbr(abr: String): GameStrategy? = when (abr) {
             "rng" -> RandomPick
             "smrt" -> SmartPick
             else -> null

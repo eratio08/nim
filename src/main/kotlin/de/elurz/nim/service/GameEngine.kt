@@ -14,7 +14,7 @@ class GameEngine {
     fun play(game: NimGame, gameMove: GameMove): NimGame {
         return when (game.getCurrentActor()) {
             Actor.PLAYER -> game.makeMove(buildComputerMove(game)).makeMove(gameMove)
-            else         -> {
+            else -> {
                 val newGame = game.makeMove(gameMove)
                 val computerMove = buildComputerMove(newGame)
                 newGame.makeMove(computerMove)

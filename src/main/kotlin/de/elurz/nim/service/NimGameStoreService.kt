@@ -4,11 +4,11 @@ import de.elurz.nim.model.NimGame
 import javax.inject.Singleton
 
 @Singleton
-class NimGameStoreService() {
+class NimGameStoreService {
     private val store: MutableMap<String, NimGame> = HashMap<String, NimGame>()
 
     fun put(key: String, value: NimGame): NimGame? =
-            store.put(key, value);
+            store.put(key, value)
 
     fun remove(key: String): NimGame? =
             this.store.remove(key)
@@ -17,7 +17,7 @@ class NimGameStoreService() {
             this.store[key]
 
     fun values(): Collection<NimGame> =
-            this.store.values;
+            this.store.values
 
     fun clear() =
             this.store.clear()

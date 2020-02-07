@@ -19,7 +19,7 @@ class GameController @Inject constructor(val gameStoreService: NimGameStoreServi
         val gameStrategy = gameStrategyAbr?.let { GameStrategy.fromAbr(it) } ?: RandomPick
         val nimGame = NimGame(gameStrategy = gameStrategy)
         gameStoreService.put(nimGame.id, nimGame)
-        return Response.status(Response.Status.CREATED).type(MediaType.APPLICATION_JSON).entity(nimGame).build();
+        return Response.status(Response.Status.CREATED).type(MediaType.APPLICATION_JSON).entity(nimGame).build()
     }
 
     @GET

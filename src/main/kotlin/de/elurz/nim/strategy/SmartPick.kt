@@ -12,10 +12,10 @@ object SmartPick : GameStrategy {
         val take = remainingPins % 4
         return when {
             remainingPins == 0 -> 0
-            take == 0          -> 3
-            take == 3          -> 2
-            take == 2          -> 1
-            else               -> take
+            take == 0 -> 3
+            take == 3 -> 2
+            take == 2 -> 1
+            else -> take
         }
     }
 

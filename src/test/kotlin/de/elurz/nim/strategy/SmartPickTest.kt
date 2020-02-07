@@ -10,9 +10,9 @@ import java.util.stream.Stream
 /**
  * @author Eike Lurz <eike.lurz@tuta.io>
  */
-internal class SmartPickTest {
+class SmartPickTest {
 
-    private val testSubject = SmartPick;
+    private val testSubject = SmartPick
 
     @ParameterizedTest
     @MethodSource("testSetProvider")
@@ -27,20 +27,20 @@ internal class SmartPickTest {
         @JvmStatic
         fun testSetProvider(): Stream<Pair<Int, Int>> {
             return Stream.of(Pair(13, 1), // loose
-                             Pair(12, 3),
-                             Pair(11, 2),
-                             Pair(10, 1),
-                             Pair(9, 1), // loose
-                             Pair(8, 3),
-                             Pair(7, 2),
-                             Pair(6, 1),
-                             Pair(5, 1), // loose
-                             Pair(4, 3),
-                             Pair(3, 2),
-                             Pair(2, 1),
-                             Pair(1, 1), // loose
-                             Pair(0, 0)
-                            )
+                    Pair(12, 3),
+                    Pair(11, 2),
+                    Pair(10, 1),
+                    Pair(9, 1), // loose
+                    Pair(8, 3),
+                    Pair(7, 2),
+                    Pair(6, 1),
+                    Pair(5, 1), // loose
+                    Pair(4, 3),
+                    Pair(3, 2),
+                    Pair(2, 1),
+                    Pair(1, 1), // loose
+                    Pair(0, 0)
+            )
         }
     }
 

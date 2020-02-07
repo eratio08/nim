@@ -39,7 +39,7 @@ data class NimGame(
      */
     fun makeMove(gameMove: GameMove): NimGame {
         if (isGameFinished()) {
-            return this;
+            return this
         }
         isMoveValid(gameMove)?.let { throw it }
         val newGameHistory = listOf(*moveHistory.toTypedArray(), gameMove)
@@ -51,10 +51,10 @@ data class NimGame(
         val currentPins = getCurrentPins()
         val pinDiff = currentPins - gameMove.pinsTaken
         return when {
-            lastActor == gameMove.actor -> NimGameException("One actor must not make two moves successively.","invalid_actor")
-            pinDiff < 0                 -> NimGameException("This move takes more pins (${gameMove.pinsTaken}) the actual available ($currentPins).", "too_less_pins_left")
-            else                        -> null
-        };
+            lastActor == gameMove.actor -> NimGameException("One actor must not make two moves successively.", "invalid_actor")
+            pinDiff < 0 -> NimGameException("This move takes more pins (${gameMove.pinsTaken}) the actual available ($currentPins).", "too_less_pins_left")
+            else -> null
+        }
     }
 
     @JsonGetter("gameStrategy")

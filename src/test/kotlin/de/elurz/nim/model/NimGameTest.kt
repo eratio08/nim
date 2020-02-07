@@ -14,14 +14,14 @@ import org.junit.jupiter.api.assertThrows
 internal class NimGameTest {
     lateinit var testSubject: NimGame
     val finishedGame = NimGame(listOf(GameMove(3, Actor.COMPUTER),
-                                      GameMove(3, Actor.PLAYER),
-                                      GameMove(3, Actor.COMPUTER),
-                                      GameMove(3, Actor.PLAYER),
-                                      GameMove(1, Actor.COMPUTER)))
+            GameMove(3, Actor.PLAYER),
+            GameMove(3, Actor.COMPUTER),
+            GameMove(3, Actor.PLAYER),
+            GameMove(1, Actor.COMPUTER)))
 
     @BeforeEach
     fun beforeEach() {
-        testSubject = NimGame(listOf(GameMove(3, Actor.COMPUTER), GameMove(3, Actor.PLAYER)));
+        testSubject = NimGame(listOf(GameMove(3, Actor.COMPUTER), GameMove(3, Actor.PLAYER)))
     }
 
     @Test
@@ -55,7 +55,7 @@ internal class NimGameTest {
 
     @Test
     fun should_make_a_move_on_a_finished_game_with_no_effect() {
-        testSubject=finishedGame
+        testSubject = finishedGame
         val move = GameMove(3, Actor.COMPUTER)
         val game = testSubject.makeMove(move)
         assertThat(game.moveHistory.last(), `is`(not(equalTo(move))))
@@ -71,9 +71,9 @@ internal class NimGameTest {
     @Test
     fun should_make_an_invalid_move_by_taken_more_pins_as_available() {
         testSubject = NimGame(listOf(GameMove(3, Actor.COMPUTER),
-                                     GameMove(3, Actor.PLAYER),
-                                     GameMove(3, Actor.COMPUTER),
-                                     GameMove(3, Actor.PLAYER)))
+                GameMove(3, Actor.PLAYER),
+                GameMove(3, Actor.COMPUTER),
+                GameMove(3, Actor.PLAYER)))
         val move = GameMove(3, Actor.COMPUTER)
         val exception = assertThrows<RuntimeException> { testSubject.makeMove(move) }
         assertThat(exception.message, Matchers.startsWith("This move takes more pins"))
