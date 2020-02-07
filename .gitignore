@@ -30,3 +30,6 @@ nb-configuration.xml
 # Gradle
 .gradle/
 build/
+
+# static frontend
+src/main/resources/META-INF/resources/
