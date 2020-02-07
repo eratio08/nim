@@ -9,6 +9,9 @@ import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.lessThan
 import org.junit.jupiter.api.Test
 
+/**
+ * @author Eike Lurz <eike.lurz@tuta.io>
+ */
 internal class GameEngineTest {
 
     private val testSubject = GameEngine();
@@ -60,7 +63,7 @@ internal class GameEngineTest {
         val step4 = testSubject.play(step3, GameMove(1, Actor.PLAYER));
         val step5 = testSubject.play(step4, GameMove(1, Actor.PLAYER));
         assertThat(step5.getCurrentPins(), `is`(lessThan(13 - 1 - 1 - 1 - 1)))
-        assertThat(step5.getCurrentActor(), `is`(Actor.COMPUTER))
+        assertThat(step5.getCurrentActor(), `is`(Actor.PLAYER))
         assertThat(step5.isGameFinished(), `is`(true))
     }
 

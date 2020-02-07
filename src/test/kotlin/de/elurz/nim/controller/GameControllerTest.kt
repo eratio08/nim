@@ -13,11 +13,14 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import javax.inject.Inject
 
+/**
+ * @author Eike Lurz <eike.lurz@tuta.io>
+ */
 @QuarkusTest
 class GameControllerTest {
 
     @Inject
-    lateinit var gameStoreService: NimGameStoreService;
+    lateinit var gameStoreService: NimGameStoreService
 
     @BeforeEach
     fun beforeEach() {
@@ -55,9 +58,9 @@ class GameControllerTest {
     @Test
     @DisplayName("Should retrieve a game by game id.")
     fun should_get_a_game_by_id() {
-        var game = NimGame(gameStrategy = RandomPick)
+        val game = NimGame(gameStrategy = RandomPick)
         gameStoreService.put(game.id, game)
-        var resp = given().pathParam("id", game.id)
+        given().pathParam("id", game.id)
                 .`when`()
                 .get("/nim-games/{id}")
                 .then()
@@ -82,7 +85,6 @@ class GameControllerTest {
                 .statusCode(200)
                 .contentType(ContentType.JSON)
                 .body("size()", `is`(2))
-
     }
 
     @Test
@@ -90,11 +92,11 @@ class GameControllerTest {
     fun should_remove_a_game_by_id() {
         var game = NimGame(gameStrategy = RandomPick)
         gameStoreService.put(game.id, game)
-        var resp = given().pathParam("id", game.id)
+        given().pathParam("id", game.id)
                 .`when`()
                 .delete("/nim-games/{id}")
                 .then()
                 .statusCode(204)
-
     }
 }
+        

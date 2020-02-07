@@ -8,6 +8,9 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
+/**
+ * @author Eike Lurz <eike.lurz@tuta.io>
+ */
 internal class NimGameTest {
     lateinit var testSubject: NimGame
     val finishedGame = NimGame(listOf(GameMove(3, Actor.COMPUTER),

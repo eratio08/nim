@@ -2,20 +2,21 @@ package de.elurz.nim.strategy
 
 import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
-import org.junit.jupiter.params.provider.ValueSource
 import java.util.stream.Stream
 
+/**
+ * @author Eike Lurz <eike.lurz@tuta.io>
+ */
 internal class SmartPickTest {
 
     private val testSubject = SmartPick;
 
     @ParameterizedTest
     @MethodSource("testSetProvider")
+    @DisplayName("Should compute pins to take in a smart way.")
     fun should_compute_pins_smartly(set: Pair<Int, Int>) {
         val (pins, pinsToTake) = set
         MatcherAssert.assertThat(testSubject.computePins(pins), Matchers.`is`(pinsToTake))

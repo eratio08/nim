@@ -10,14 +10,18 @@ import io.restassured.http.ContentType
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import javax.inject.Inject
 
+/**
+ * @author Eike Lurz <eike.lurz@tuta.io>
+ */
 @QuarkusTest
 internal class GameMoveControllerTest {
 
     @Inject
-    lateinit var gameStoreService: NimGameStoreService;
+    lateinit var gameStoreService: NimGameStoreService
 
     @BeforeEach
     fun beforeEach() {
@@ -25,6 +29,7 @@ internal class GameMoveControllerTest {
     }
 
     @Test
+    @DisplayName("Should make a game move with the computer moving last.")
     fun should_make_a_game_move_with_computer_moving_last() {
         var game = NimGame()
         gameStoreService.put(game.id, game)
@@ -42,6 +47,7 @@ internal class GameMoveControllerTest {
     }
 
     @Test
+    @DisplayName("Should make a game move with computer moving first.")
     fun should_make_a_game_move_with_computer_moving_first() {
         var game = NimGame(listOf(GameMove(3, Actor.PLAYER)))
         gameStoreService.put(game.id, game)
@@ -57,6 +63,4 @@ internal class GameMoveControllerTest {
                 .body("actor", `is`(Actor.PLAYER.toString()))
         assertThat(gameStoreService[game.id]?.getCurrentPins(), `is`(lessThan(13 - 3 - 3)))
     }
-
-
 }
