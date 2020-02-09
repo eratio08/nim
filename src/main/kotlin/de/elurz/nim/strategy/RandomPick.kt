@@ -3,6 +3,7 @@ package de.elurz.nim.strategy
 /**
  * A GameStrategy which will calculate a random number of pins.
  * @see GameStrategy
+ * @author Eike Lurz <eike.lurz@tuta.io>
  */
 object RandomPick : GameStrategy {
 

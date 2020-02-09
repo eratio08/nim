@@ -1,11 +1,9 @@
 package de.elurz.nim.strategy
 
-/**
- * @author Eike Lurz <eike.lurz@tuta.io>
- */
 
 /**
  * A game strategy used by the computer to calculate the number of pins to take in the next state of a game.
+ * @author Eike Lurz <eike.lurz@tuta.io>
  */
 interface GameStrategy {
 

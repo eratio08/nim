@@ -3,6 +3,11 @@ package de.elurz.nim.service
 import de.elurz.nim.model.NimGame
 import javax.inject.Singleton
 
+/**
+ * In memory store for nim games.
+ * @author Eike Lurz <eike.lurz@tuta.io>
+ * @see NimGame
+ */
 @Singleton
 class NimGameStoreService {
     private val store: MutableMap<String, NimGame> = HashMap<String, NimGame>()

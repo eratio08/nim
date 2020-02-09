@@ -1,8 +1,9 @@
 package de.elurz.nim.model
 
 /**
- * Actor of a State.
- * @see State
+ * Actor of a game move.
+ * @see GameMove
+ * @author Eike Lurz <eike.lurz@tuta.io>
  */
 enum class Actor(val abr: String) {
     PLAYER("plr"),

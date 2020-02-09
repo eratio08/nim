@@ -4,6 +4,11 @@ import javax.ws.rs.core.Response
 import javax.ws.rs.ext.ExceptionMapper
 import javax.ws.rs.ext.Provider
 
+/**
+ * Exception Handler for NimGameException.
+ * @author Eike Lurz <eike.lurz@tuta.io>
+ * @see NimGameException
+ */
 @Provider
 class ExceptionHandler : ExceptionMapper<NimGameException> {
 

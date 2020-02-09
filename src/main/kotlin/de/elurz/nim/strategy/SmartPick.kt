@@ -5,6 +5,7 @@ package de.elurz.nim.strategy
  * Will try to force the opponent into a loosing state.
  * Check https://en.wikipedia.org/wiki/Nim
  * @see GameStrategy
+ * @author Eike Lurz <eike.lurz@tuta.io>
  */
 object SmartPick : GameStrategy {
 

@@ -8,6 +8,11 @@ import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
+/**
+ * REST controller for GameMove entity.
+ * @author Eike Lurz <eike.lurz@tuta.io>
+ * @see GameMove
+ */
 @Path("/moves")
 class GameMoveController @Inject constructor(val gameStoreService: NimGameStoreService,
                                              val gameEngine: GameEngine) {

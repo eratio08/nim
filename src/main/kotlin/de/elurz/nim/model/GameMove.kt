@@ -4,6 +4,11 @@ import de.elurz.nim.controller.NimGameException
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
+/**
+ * A move in a NimGame.
+ * @see NimGame
+ * @author Eike Lurz <eike.lurz@tuta.io>
+ */
 data class GameMove(@NotNull val pinsTaken: Int, @NotNull @NotBlank val actor: Actor) {
     init {
         when {

@@ -8,6 +8,7 @@ import java.util.*
 
 /**
  * A game of Nim.
+ * @author Eike Lurz <eike.lurz@tuta.io>
  */
 data class NimGame(
         val moveHistory: List<GameMove> = mutableListOf(),

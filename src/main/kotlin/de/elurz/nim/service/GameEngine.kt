@@ -5,6 +5,10 @@ import de.elurz.nim.model.GameMove
 import de.elurz.nim.model.NimGame
 import javax.inject.Singleton
 
+/**
+ * An engine to play a nim game against the computer.
+ * @author Eike Lurz <eike.lurz@tuta.io>
+ */
 @Singleton
 class GameEngine {
 

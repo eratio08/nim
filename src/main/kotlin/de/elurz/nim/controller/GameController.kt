@@ -9,6 +9,11 @@ import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
+/**
+ * REST controller for a NimGame.
+ * @author Eike Lurz <eike.lurz@tuta.io>
+ * @see NimGame
+ */
 @Path("/nim-games")
 class GameController @Inject constructor(val gameStoreService: NimGameStoreService) {
 
